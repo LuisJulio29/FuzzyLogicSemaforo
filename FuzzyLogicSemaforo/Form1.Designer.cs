@@ -49,7 +49,6 @@
             nudFlujo.Name = "nudFlujo";
             nudFlujo.Size = new Size(250, 27);
             nudFlujo.TabIndex = 0;
-            nudFlujo.ValueChanged += numericUpDown1_ValueChanged;
             // 
             // nudVelocidad
             // 
@@ -66,7 +65,6 @@
             label1.Size = new Size(105, 20);
             label1.TabIndex = 2;
             label1.Text = "Flujo Vehicular";
-            label1.Click += label1_Click;
             // 
             // label2
             // 
@@ -76,7 +74,6 @@
             label2.Size = new Size(139, 20);
             label2.TabIndex = 3;
             label2.Text = "Velocidad Vehicular";
-            label2.Click += label2_Click;
             // 
             // label3
             // 
@@ -129,7 +126,6 @@
             Controls.Add(nudFlujo);
             Name = "Form1";
             Text = "Form1";
-            Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)nudFlujo).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudVelocidad).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudHora).EndInit();
