@@ -44,14 +44,17 @@
             // nudFlujo
             // 
             nudFlujo.AccessibleName = "nudFlujo";
+            nudFlujo.DecimalPlaces = 1;
             nudFlujo.Location = new Point(357, 168);
             nudFlujo.Maximum = new decimal(new int[] { 900, 0, 0, 0 });
             nudFlujo.Name = "nudFlujo";
             nudFlujo.Size = new Size(250, 27);
             nudFlujo.TabIndex = 0;
+            nudFlujo.ValueChanged += nudFlujo_ValueChanged;
             // 
             // nudVelocidad
             // 
+            nudVelocidad.DecimalPlaces = 1;
             nudVelocidad.Location = new Point(357, 258);
             nudVelocidad.Name = "nudVelocidad";
             nudVelocidad.Size = new Size(250, 27);

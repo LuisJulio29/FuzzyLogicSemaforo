@@ -125,5 +125,10 @@ namespace FuzzyLogicSemaforo
             double tiempoVerde = FuzzyEngine.CalcularTiempoVerde(reglasDifusas, flujo, velocidad, hora);
             lblResultado.Text = $"Tiempo semáforo en verde: {tiempoVerde:F2} segundos";
         }
+
+        private void nudFlujo_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
