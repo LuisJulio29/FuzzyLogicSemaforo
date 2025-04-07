@@ -8,6 +8,26 @@ namespace FuzzyLogicSemaforo
 {
     public class FuzzyFunctions
     {
+        // Funcion Hombro
+        public static double Hombro(double value, double a, double b)
+        {
+            if (value <= a)
+                return 1.0;
+            else if (value < b)
+                return (value - a) / (b - a);
+            else
+                return 0.0;
+        }
+        // Función saturación
+        public static double Saturacion(double value, double a, double b)
+        {
+            if (value <= a)
+                return 0.0;
+            else if (value <= b)
+                return (b - value) / (b - a);
+            else
+                return 1.0;
+        }
         // Función trapezoidal
         public static double Trapezoidal(double value, double a, double b, double c, double d)
         {
