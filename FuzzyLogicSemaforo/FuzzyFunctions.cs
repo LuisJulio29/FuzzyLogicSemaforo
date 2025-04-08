@@ -13,8 +13,8 @@ namespace FuzzyLogicSemaforo
         {
             if (value <= a)
                 return 1.0;
-            else if (value < b)
-                return (value - a) / (b - a);
+            else if (value <= b && value >= a)
+                return (value - b) / (b - a);
             else
                 return 0.0;
         }
@@ -23,37 +23,38 @@ namespace FuzzyLogicSemaforo
         {
             if (value <= a)
                 return 0.0;
-            else if (value <= b)
-                return (b - value) / (b - a);
+            else if (value <= b && value >= a)
+                return (value - a) / (b - a);
             else
                 return 1.0;
         }
         // Función trapezoidal
-        public static double Trapezoidal(double value, double a, double b, double c, double d)
+        public static double Trapezoidal(double value, double a, double b, double y, double s)
         {
-            if (value <= a || value >= d)
+            if (value <= a || value >= s)
                 return 0;
-            else if (value >= b && value <= c)
-                return 1;
-            else if (value > a && value < b)
+            else if (value >= a && value <= b)
                 return (value - a) / (b - a);
-            else // x > c && x < d
-                return (d - value) / (d - c);
+            else if (value >= b && value <= y)
+                return 1.0;
+            else if(value >= y && value <= s)
+                return (s - value) / (s - y);
+            else
+                return 0;
         }
 
         // Función triangular
-        public static double Triangular(double value, double a, double b, double c)
+        public static double Triangular(double value, double a, double b, double y)
         {
-            if (value <= a || value >= c)
+            if (value <= a || value >= y)
                 return 0;
-            else if (value == b)
-                return 1;
-            else if (value < b)
+            else if (value >= a && value <= b)
                 return (value - a) / (b - a);
-            else // x > b
-                return (c - value) / (c - b);
+            else if (value >= b && value <= y)
+                return (y - value) / (y - b);
+            else
+                return 0;
         }
-
         // Función gaussiana
         public static double Gaussian(double value, double mean, double sigma)
         {
