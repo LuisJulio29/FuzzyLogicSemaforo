@@ -118,6 +118,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
             ClientSize = new Size(1283, 707);
             Controls.Add(nudHora);
             Controls.Add(lblResultado);
