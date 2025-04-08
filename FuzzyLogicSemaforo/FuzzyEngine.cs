@@ -6,7 +6,6 @@ namespace ControlDifusoSemaforo
 {
     public static class FuzzyEngine
     {
-        // Ejemplo de método para calcular el tiempo en verde
         public static double CalcularTiempoVerde(
             List<FuzzyRule> reglasDifusas,
             double flujo,
@@ -20,17 +19,12 @@ namespace ControlDifusoSemaforo
                 { "Velocidad", velocidad },
                 { "Hora", hora }
             };
-
             // 2) Identificar reglas activas
             var activeRules = FuzzyInference.GetActiveRules(reglasDifusas, crispInputs);
-
-            // 3) Recorte y Agregación sobre el dominio de la salida
-            // Supongamos que el dominio del Tiempo Semáforo es de 30..90
+            // 3) Recorte y Agregación sobre el dominio de la salida 
             var aggregated = FuzzyAggregation.AggregateOutput(activeRules, 30, 90, 1.0);
-
             // 4) Defuzzificar (Centroide)
             double resultado = FuzzyDefuzzification.Centroid(aggregated);
-
             return resultado;
         }
     }
