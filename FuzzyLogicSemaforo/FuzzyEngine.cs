@@ -1,4 +1,6 @@
-﻿using FuzzyLogicSemaforo;
+﻿using FuzzyLogicSemaforo.Desfuzzificacion;
+using FuzzyLogicSemaforo.Fuzzificación;
+using FuzzyLogicSemaforo.Logic;
 using System;
 using System.Collections.Generic;
 
