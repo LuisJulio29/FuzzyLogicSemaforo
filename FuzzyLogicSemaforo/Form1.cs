@@ -18,48 +18,39 @@ namespace FuzzyLogicSemaforo
         }
         private void InicializarFuzzyLabels()
         {
-            // Ejemplo: Flujo Bajo (Trapezoidal 0,0,200,200), Medio (350,350,550,550), Alto (700,700,900,900)
             labelsFlujo = new List<FuzzyLabel>
                 {
-                    new FuzzyLabel("Flujo", "Bajo", x => FuzzyFunctions.Hombro(x, 0, 300)),
-                    new FuzzyLabel("Flujo", "Medio", x => FuzzyFunctions.Trapezoidal(x, 350, 350, 550, 550)),
-                    new FuzzyLabel("Flujo", "Alto", x => FuzzyFunctions.Saturacion(x, 700, 900))
+                    new FuzzyLabel("Flujo", "Bajo", x => FuzzyFunctions.Hombro(x, 300, 400)),
+                    new FuzzyLabel("Flujo", "Medio", x => FuzzyFunctions.Trapezoidal(x, 350, 450, 550, 650)),
+                    new FuzzyLabel("Flujo", "Alto", x => FuzzyFunctions.Saturacion(x, 600, 700))
                 };
-
-            // Velocidad: Trancon, Lenta, Regular, Rápida (funciones triangulares)
             labelsVelocidad = new List<FuzzyLabel>
                 {
-                    new FuzzyLabel("Velocidad", "Trancon", x => FuzzyFunctions.Hombro(x, 0, 5)),
-                    new FuzzyLabel("Velocidad", "Lenta", x => FuzzyFunctions.Triangular(x, 0, 10, 20)),
-                    new FuzzyLabel("Velocidad", "Regular", x => FuzzyFunctions.Triangular(x, 10, 30, 40)),
-                    new FuzzyLabel("Velocidad", "Rapida", x => FuzzyFunctions.Saturacion(x, 40, 60))
+                    new FuzzyLabel("Velocidad", "Trancon", x => FuzzyFunctions.Hombro(x, 5, 8)),
+                    new FuzzyLabel("Velocidad", "Lenta", x => FuzzyFunctions.Triangular(x, 5, 15, 25)),
+                    new FuzzyLabel("Velocidad", "Regular", x => FuzzyFunctions.Triangular(x, 20, 30, 40)),
+                    new FuzzyLabel("Velocidad", "Rapida", x => FuzzyFunctions.Triangular(x, 35, 45, 55)),
+                    new FuzzyLabel("Velocidad", "MuyRapida", x => FuzzyFunctions.Saturacion(x, 50, 60))
                 };
-
-            // Hora: Mañana (Gauss), Tarde (Gauss), Noche (Gauss)
             labelsHora = new List<FuzzyLabel>
                 {
-                    new FuzzyLabel("Hora", "Manana", x => FuzzyFunctions.Gaussian(x, 9, 1)),
+                    new FuzzyLabel("Hora", "Manana", x => FuzzyFunctions.Hombro(x,11,12)),
                     new FuzzyLabel("Hora", "Tarde", x => FuzzyFunctions.Gaussian(x, 14, 1.5)),
-                    new FuzzyLabel("Hora", "Noche", x => FuzzyFunctions.Gaussian(x, 19, 1))
+                    new FuzzyLabel("Hora", "Noche", x => FuzzyFunctions.Saturacion(x,17,18))
                 };
-
-            // Salida: Tiempo semáforo (Bajo, Medio, Alto) – usaremos trapezoidal
             labelsSalida = new List<FuzzyLabel>
                 {
                     // Bajo: [30..45]
-                    new FuzzyLabel("Tiempo", "Bajo", x => FuzzyFunctions.Trapezoidal(x, 30, 30, 45, 45)),
-                    // Medio: [50..65]
-                    new FuzzyLabel("Tiempo", "Medio", x => FuzzyFunctions.Trapezoidal(x, 50, 50, 65, 65)),
-                    // Alto: [70..90]
-                    new FuzzyLabel("Tiempo", "Alto", x => FuzzyFunctions.Trapezoidal(x, 70, 70, 90, 90))
+                    new FuzzyLabel("Tiempo", "Corto", x => FuzzyFunctions.Hombro(x,40,45)),
+                    new FuzzyLabel("Tiempo", "MedioCorto", x => FuzzyFunctions.Trapezoidal(x, 40, 45, 50, 55)),
+                    new FuzzyLabel("Tiempo", "Medio", x => FuzzyFunctions.Trapezoidal(x, 50, 55, 65, 70)),
+                    new FuzzyLabel("Tiempo", "MedioLargo", x => FuzzyFunctions.Trapezoidal(x, 65, 70, 75, 80)),
+                    new FuzzyLabel("Tiempo", "Largo", x => FuzzyFunctions.Saturacion(x,75,80))
                 };
         }
         private void InicializarReglas()
         {
             reglasDifusas = new List<FuzzyRule>();
-
-            // Ejemplo de creación de reglas:
-            // IF Flujo=Bajo AND Velocidad=Trancon AND Hora=Manana THEN Tiempo=Bajo
             var flujoBajo = labelsFlujo.Find(l => l.LabelName == "Bajo");
             var flujoMedio = labelsFlujo.Find(l => l.LabelName == "Medio");
             var flujoAlto = labelsFlujo.Find(l => l.LabelName == "Alto");
@@ -67,53 +58,43 @@ namespace FuzzyLogicSemaforo
             var velLenta = labelsVelocidad.Find(l => l.LabelName == "Lenta");
             var velRegular = labelsVelocidad.Find(l => l.LabelName == "Regular");
             var velRapida = labelsVelocidad.Find(l => l.LabelName == "Rapida");
+            var velMuyRapida = labelsVelocidad.Find(l => l.LabelName == "MuyRapida");
             var horaManana = labelsHora.Find(l => l.LabelName == "Manana");
             var horaTarde = labelsHora.Find(l => l.LabelName == "Tarde");
             var horaNoche = labelsHora.Find(l => l.LabelName == "Noche");
-            var tiempoBajo = labelsSalida.Find(l => l.LabelName == "Bajo");
+            var tiempoCorto = labelsSalida.Find(l => l.LabelName == "Corto");
+            var tiempoMedioCorto = labelsSalida.Find(l => l.LabelName == "MedioCorto");
             var tiempoMedio = labelsSalida.Find(l => l.LabelName == "Medio");
-            var tiempoAlto = labelsSalida.Find(l => l.LabelName == "Alto");
-
+            var tiempoMedioLargo = labelsSalida.Find(l => l.LabelName == "MedioLargo");
+            var tiempoLargo = labelsSalida.Find(l => l.LabelName == "Largo");
             var reglas = new List<FuzzyRule>
             {
-                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velTrancon, horaManana }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velLenta, horaManana }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velRegular, horaManana }, tiempoBajo, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velRapida, horaManana }, tiempoBajo, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velTrancon, horaTarde }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velLenta, horaTarde }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velRegular, horaTarde }, tiempoBajo, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velRapida, horaTarde }, tiempoBajo, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velTrancon, horaNoche }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velLenta, horaNoche }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velRegular, horaNoche }, tiempoBajo, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velRapida, horaNoche }, tiempoBajo, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velTrancon, horaManana }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velLenta, horaManana }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velRegular, horaManana }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velRapida, horaManana }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velTrancon, horaTarde }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velLenta, horaTarde }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velRegular, horaTarde }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velRapida, horaTarde }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velTrancon, horaNoche }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velLenta, horaNoche }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velRegular, horaNoche }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velRapida, horaNoche }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velTrancon, horaManana }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velLenta, horaManana }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velRegular, horaManana }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velRapida, horaManana }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velTrancon, horaTarde }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velLenta, horaTarde }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velRegular, horaTarde }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velRapida, horaTarde }, tiempoMedio, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velTrancon, horaNoche }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velLenta, horaNoche }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velRegular, horaNoche }, tiempoAlto, "AND"),
-                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velRapida, horaNoche }, tiempoAlto, "AND")
-            };
+                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velTrancon }, tiempoLargo, "OR"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velRegular }, tiempoMedio, "OR"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velMuyRapida }, tiempoCorto, "OR"),
 
+                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velTrancon }, tiempoMedio, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velRegular,horaManana }, tiempoMedioCorto, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velRegular,horaNoche }, tiempoMedioCorto, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velMuyRapida }, tiempoCorto, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoBajo, velRapida }, tiempoCorto, "AND"),
+
+                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velTrancon }, tiempoMedioLargo, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velLenta }, tiempoMedio, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velRegular, horaManana }, tiempoMedio, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velRegular, horaNoche }, tiempoMedio, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velRapida, horaTarde }, tiempoMedioCorto, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velRapida }, tiempoCorto, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoMedio, velMuyRapida }, tiempoCorto, "AND"),
+
+                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velLenta }, tiempoMedioLargo, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velRegular, horaTarde }, tiempoMedio, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velTrancon, horaTarde }, tiempoLargo, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velRegular, horaManana }, tiempoMedioLargo, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velRegular, horaNoche }, tiempoMedioLargo, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velRapida }, tiempoMedio, "AND"),
+                new FuzzyRule(new List<FuzzyLabel> { flujoAlto, velMuyRapida }, tiempoMedioCorto, "AND"),
+            };
             reglasDifusas.AddRange(reglas);
         }
         private void button1_Click(object sender, EventArgs e)
@@ -121,9 +102,26 @@ namespace FuzzyLogicSemaforo
             double flujo = (double)nudFlujo.Value;       // Vehículos/h
             double velocidad = (double)nudVelocidad.Value; // Km/h
             double hora = (double)nudHora.Value;
+            var crispInputs = new Dictionary<string, double>
+                {
+                    { "Flujo", flujo },
+                    { "Velocidad", velocidad },
+                    { "Hora", hora }
+                };
+            var activeRules = FuzzyInference.GetActiveRules(reglasDifusas, crispInputs);
 
             double tiempoVerde = FuzzyEngine.CalcularTiempoVerde(reglasDifusas, flujo, velocidad, hora);
-            lblResultado.Text = $"Tiempo semáforo en verde: {tiempoVerde:F2} segundos";
+            lblResultado.Text = $"Tiempo semáforo en verde: {tiempoVerde:F4} segundos";
+
+            foreach (var (rule, activation) in activeRules)
+            {
+                // Mostrar solo aquellas reglas cuya activación sea mayor a un umbral, si se desea
+                if (activation > 0)
+                {
+                    ChartRuleForm chartForm = new ChartRuleForm(rule, activation, crispInputs);
+                    chartForm.Show();
+                }
+            }
         }
 
         private void nudFlujo_ValueChanged(object sender, EventArgs e)
