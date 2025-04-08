@@ -8,8 +8,6 @@ namespace ControlDifusoSemaforo
         {
             double numerator = 0.0;
             double denominator = 0.0;
-
-            // aggregated[x] = valor de membresía en x
             foreach (var kvp in aggregated)
             {
                 double x = kvp.Key;
@@ -18,10 +16,8 @@ namespace ControlDifusoSemaforo
                 numerator += x * mu;
                 denominator += mu;
             }
-
             if (denominator == 0)
                 return 0;
-
             return numerator / denominator;
         }
     }
